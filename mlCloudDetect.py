@@ -37,7 +37,7 @@ while True:
 	date = datetime.datetime.now(datetime.timezone.utc)
 
 	# Call the clouds object to determine if it's cloudy
-	result=clouds.isCloudy()
+	result=clouds.classify()
 	client.publish(mqtt_topic, result)
 	print(result)
 
