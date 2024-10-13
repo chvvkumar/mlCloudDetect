@@ -6,6 +6,7 @@ import time
 from pysolar.solar import *
 import datetime
 import os
+import requests
 
 import warnings
 warnings.filterwarnings("ignore")
