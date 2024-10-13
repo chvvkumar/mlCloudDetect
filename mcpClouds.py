@@ -33,12 +33,12 @@ sys.path.append(str(Path(__file__).parent.absolute().parent))
 # Define the McpClouds class
 class McpClouds(object):
     CLASS_NAMES = (
-        'Clear',
-        'Cloudy',
         'ClearDay',
-        'CloudyAndRainy',
-        'Moon',
-        'Snow'
+        'ClearNight',
+        'CloudyandRainy',
+        'CloudyDay',
+        'CloudyNight',
+        'Rainy'
     )
 
     # Initialize the object
