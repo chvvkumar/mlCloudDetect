@@ -23,6 +23,9 @@ config=McpConfig()
 mqtt_broker = config.get("MQTT_BROKER")
 mqtt_port = int(config.get("MQTT_PORT"))
 mqtt_topic = config.get("MQTT_TOPIC")
+print("MQTT Broker: "+mqtt_broker)
+print("MQTT Port: "+str(mqtt_port))
+print("MQTT Topic: "+mqtt_topic)
 
 # Initialize MQTT client
 client = mqtt.Client()
@@ -33,7 +36,7 @@ while True:
 	# Call the clouds object to determine sky status
 	result=clouds.classify()
 	# Publish the result to MQTT
-	client.publish(mqtt_topic, result)
+	# client.publish(mqtt_topic, result)
 	# Print the result to the console
 	print(result)
 
