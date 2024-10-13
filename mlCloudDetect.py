@@ -5,14 +5,13 @@ import numpy as np
 import time
 from pysolar.solar import *
 import datetime
-import os
-import requests
 import paho.mqtt.client as mqtt
-import json
 import warnings
 warnings.filterwarnings("ignore")
 
-VERSION="1.0.0"
+# import os
+# import requests
+# import json
 
 from mcpClouds import McpClouds
 clouds=McpClouds()
@@ -23,6 +22,8 @@ config=McpConfig()
 mqtt_broker = config.get("MQTT_BROKER")
 mqtt_port = int(config.get("MQTT_PORT"))
 mqtt_topic = config.get("MQTT_TOPIC")
+
+# Print the configuration
 print("MQTT Broker: "+mqtt_broker)
 print("MQTT Port: "+str(mqtt_port))
 print("MQTT Topic: "+mqtt_topic)
@@ -30,6 +31,7 @@ print("MQTT Topic: "+mqtt_topic)
 # Initialize MQTT client
 client = mqtt.Client()
 client.connect(mqtt_broker, mqtt_port, 60)
+print("Connected to MQTT broker")
 
 while True:
 	date = datetime.datetime.now(datetime.timezone.utc)
