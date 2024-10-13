@@ -21,7 +21,7 @@ config=McpConfig()
 
 # MQTT configuration
 mqtt_broker = config.get("MQTT_BROKER")
-mqtt_port = config.get("MQTT_PORT")
+mqtt_port = int(config.get("MQTT_PORT"))
 mqtt_topic = config.get("MQTT_TOPIC")
 
 # Initialize MQTT client
