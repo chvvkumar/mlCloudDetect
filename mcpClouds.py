@@ -26,6 +26,7 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 import keras
 logger.setLevel(logging.INFO)
 
+# Add the parent directory to the path so we can import the config
 sys.path.append(str(Path(__file__).parent.absolute().parent))
 
 class McpClouds(object):
@@ -37,12 +38,14 @@ class McpClouds(object):
         'Moon',
         'Snow'
     )
-    
+
+    # Initialize the object
     def __init__(self):
         self.config = config
         logger.info('Using keras model: %s', config.get("KERASMODEL"))
         self.model = keras.models.load_model(config.get("KERASMODEL"), compile=False)
 
+    # Classify the image
     def classify(self):
         image_url = config.get("LATEST_FILE_URL")
         response = requests.get(image_url)
@@ -50,6 +53,7 @@ class McpClouds(object):
         result = self.detect(image)
         return result
 
+    # Detect the image
     def detect(self, image):
         # Load and preprocess the image
         image = image.resize((256, 256))
