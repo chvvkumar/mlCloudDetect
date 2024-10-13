@@ -1,111 +1,97 @@
-# mlCloudDetect
-Cloud Detection using AllSky Cameras. This software will examine images from any allsky camera that can produce an image on disk at a known location. For indi-allsky, the software will load the latest image location from the database. Using Machine Learning, the software compares the most recent image with it's training model to produce a file that will tell you whether the sky is cloudy or clear. For observatories that means open the roof or not. The software also supports pending states where it will delay opening or closing so the observatory isn't constantly opening and closing all night! All messages and configuration is set using an INI file. Also included is a program to train a new model based on your images from your allskycam. Just capture JPG images from your camera into a folder with two sub-folders Clear and Cloudy with the appropriate images in them, and the code will train a new model specific to your sky conditions. This is especially important for dark sky sites where clouds are usually dark, not lit up by lights in my Bortle 8 location.
+# AllSky ML Sky Detect and publish to Home Assistant via. MQTT
 
-Requires Python >= 3.10 if not using Windows executables.
+## Overview
 
-Releases:
-* Version 1.0.0+ requires a Keras V3 model and will run in any version of Python. It takes no parameters but uses a config file mlCloudDetect.ini (see below). 
-* Version 0.9.0 requires Python 3.8 and Keras/Tensorflow 2.11 to support V2 keras model files like those created by Teachable Machine. It requires command line parameters. Run the program without parameters to see usage or see below.
+This project is designed to use to determine sky conditions from TJ's AllSky application and publish it to Home Assistant via MQTT. 
 
-Please see the article at https://openastronomy.substack.com/p/detecting-clouds-with-machine-learning for basic operation and how to create a keras V2 model for your observatory. The primary purpose of the script is to inform weather watcher software whether it's safe and useful to open the observatory roof and commence observations. Note that using the method in this article produces Keras V2 files so you need V0.9.0 of mlCloudDetect.
+This code is heavily inspired by @gordtulloch's work here:
+https://github.com/gordtulloch/mlCloudDetect
 
-## Cloud detection model
-The mlCloudDetect program requires a Keras format model file to operate. A starter version of this file can be downloaded from the following OneDrive store (it's too big to put on Github)
+I have changed it to suit my own use case.
 
-Keras V3 sample model 
-* mlCloudDetect.keras     https://1drv.ms/u/s!AuTKPznBac46gph3tMCqR540AAZUfg?e=LJXvH6
+## Changes from hte original code
+- Remove functionality to save the results to a file as results will be published to MQTT instead
+- Removed detection based on sun as this is intended to run all the time, regardless of whether it is day or night
+- Removed OS checks and messages as I intend this to only run on Debian/Raspberry PI OS
+- Changed the training script to accept multiple detection classes
+- Changed `mlCloudDetect.py` to debug MQTT details to console for troubleshooting
+- Changed requirements and imports to add and remove packages as needed
+- Added the ability to obtain the image from a URL instead of from a file as I intend to run this on a different machine to the AllSky Pi
+- Added the output to MQTT to include some detection parameters like confidence level, duration etc. This can be furthur used in Home Assistant to create entity colors based on confidence level of the identification
+- Results are published to MQTT as a JSON object that can easily be parsed in HA using template sensors
 
-Keras V2 sample model (for the old version 0.9.0)
-* keras_model.h5           https://1drv.ms/u/s!AuTKPznBac46gph4fPUqaRl3XOoHbA?e=GLdplP
-* labels.txt               https://1drv.ms/t/s!AuTKPznBac46gph6qOyVBYm_MSSsRw?e=tLrwUA
+## Overview of operations
 
-I suggest that you create your own version of this file as soon as you can since I have trained the model based on images from my Bortle 8 sky, and you will likely have a different sky than mine. To train a new model:
+- Clone repo
+- Create venv and activate it
+- Install dependencies from requirements.txt
+- Train your model (my model is included but YMMV with it) and copy to the project firectory
+- Configure `mlCloudDetect.ini`
+- Verify the output is as expected
+- Set the script to run on boot with cron
+- Configure sensors in Home Assistant
 
-* Capture sample images from your All Sky Camera and put them into a training folder with two sub-folders - Clear and Cloudy
-* Back up your existing mlCloudDetect.keras file somewhere safe.
-* Update mlCloudDetect.ini to set trainfolder to the location of your image folders e.g. C:/Users/myuser/Desktop/allskyimages/ (note the forward slashes if you are running Windows!)
-* Run the program trainMlCloudDetect.py (or the EXE file in Windows) which will create a new mlCloudDetect.keras file for you. This program takes some time to run.
 
-## Version 0.9.0 Parameters (SUPERCEDED)
-This version of the program was modified to run as a Windows exe so all of the previously editable parameters in the script were made command line parameters. needs to be called with the following:
+## Directory Structure
 
-    mlCloudDetect lat long pending imagefile
+- `mcpClouds.py`: Script to run the image against a model and generate the conditions output.
+- `mcpConfig.py`: Configuration file handling script.
+- `mlCloudDetect.ini`: Configuration file for cloud detection.
+- `mlCloudDetect.py`: Main script to handle cloud detection.
+- `requirements.txt`: List of dependencies required for the project.
+- `trainMlMultiClass.py`: Script for training a multi-class machine learning model.
+- `TODO`: List of tasks and features to be implemented.
 
-where lat and long are your latitude and longitude, pending is the number of minutes you want to delay between opening and closing your roof, and imagefile is the latest image file for your allsky cam.So for example at my location:
+## Installation
 
-    mlCloudDetect 49.9 -97.1 10 latest.jpg
+1. Clone the repository:
+    ```sh
+    git clone git@github.com:chvvkumar/mlCloudDetect.git
+    ```
+2. Navigate to the project directory:
+    ```sh
+    cd mlCloudDetect/
+    ```
+3. Create and activate a virtual environment:
+    ```sh
+    python3 -m venv . && source bin/activate
+    ```
+4. Install the dependencies:
+    ```sh
+    pip install -r requirements.txt
+    ```
+5. In some cases, you may also need to install the following 
+    ```sh
+    sudo apt-get update && sudo apt-get install ffmpeg libsm6 libxext6
+    ```
 
-Version 1.0.0+ of the program moved all parameters into an INI file. 
+## Usage
 
-## INI File Parameters
-The mlCloudDetect.ini file supports the following parameters:
-
-| Parameter | Default | Description |
-|-----------|--------------------------------------------------------|---------------------------------------------------------------------|
-| LATITUDE | 49.8954 | Latitude of observer |
-| LONGITUDE | -97.1385 | Longitude of observer (negative if West) |
-| ALLSKYCAM | INDI-ALLSKY | What kind of allskycam - choice are NONE,INDI-ALLSKY or something else (e.g. TJ) |
-| ALLSKYCAMNO | 1 | Determines what camera to pull the latest image from in indi-allsky |
-| ALLSKYFILE | /var/www/html/allsky/images/latest.jpg | What the latest file is called (in non-indi-allsky) |
-| PENDING | 10 | How long you want to wait to transition between open and closed (in minutes) |
-| TRAINFOLDER | /home/stellarmate/allskycam | Folder where training files are |
-| CLEARMSG | Roof Open | Message to output when no clouds |
-| CLOUDMSG | Roof Closed | Message to output when cloudy |
-| CLOUDPENDINGMSG | Close Pending | Message to output when cloud detected but roof open |
-| CLEARPENDINGMSG | Open Pending | Message to output when clear sky detected but roof closed |
-| KERASMODEL | mlCloudDetect.keras | Model file to use |
-| DAYTIME| -12 | Altitude that the sun has to be at to be full night |
-
-## Installation in Python
-To install and run mlCloudDetect in Python, create a Python virtual environment (to avoid various package conflicts) and run the application from a terminal window.
-
-    git clone https://github.com/gordtulloch/mlCloudDetect.git
-    cd mlCloudDetect
-    python3 -m venv .venv           
-    source .venv/bin/activate        # in Linux
-    .venv\scripts\activate.bat        # in Windows
-
-    pip3 install -r requirements.txt
+- To run the main script:
+    ```sh
     python3 mlCloudDetect.py
+    ```
+- To train the machine learning model:
+    ```sh
+    python trainMlMultiClass.py
+    ```
 
-You need to get a jpg named latest.jpg from your allsky software into the mlCloudDetect folder or adjust the path of the program to point to it in the ini file. With the Thomas Joquin software this file is created in /var/www/html/allsky/latest.jpg so edit the mlCloudDetect.py program to find the file there.  In the indi-allsky software mlCloudDetect will query the database for the correct file to analyze.
+## Configuration
 
-## Updating in Python
+- Modify the `mlCloudDetect.ini` file to configure the cloud detection settings. Add your MQTT broker details, your training folders etc.
+- Create a script called `/initMLCloudDetect.sh` at `/home/pi/initMLCloudDetect.sh` with the following contents. This script is invoked on every boot:
+    ```sh
+    #!/bin/bash
+    cd /home/pi/mlCloudDetect/
+    python3 -m venv . && source bin/activate && python3 mlCloudDetect.py
+    ```
+- `chmod +x` to make it executable
+- Add this to your user's `crontab -e`
+    ```sh
+    @reboot /home/pi/initMLCloudDetect.sh
+    ```
 
-    cd mlCloudDetect
-    git pull
+## To-Do
 
-## Running mlCloudDetect under Windows 
-If you don't want to run mlCloudDetect under Python directly there is a Windows version as an exe file created under PyInstaller that incorporates these requirements, so if that works for you please download the exe file from:
-
-Version 0.9.0 (old Keras V2 model files)
-mlCloudDetect.0.9.0.exe [https://1drv.ms/u/s!AuTKPznBac46gphDwGPjozIPB4FvVw?e=EClepg](https://1drv.ms/u/s!AuTKPznBac46gphDwGPjozIPB4FvVw?e=kAGErY)
-
-also required:
-* keras_model.h5    https://1drv.ms/u/s!AuTKPznBac46gph4fPUqaRl3XOoHbA?e=GLdplP
-* labels.txt        https://1drv.ms/t/s!AuTKPznBac46gph6qOyVBYm_MSSsRw?e=tLrwUA
-
-Version 1.0.0
-* mlCloudDetect.1.0.0.exe             https://1drv.ms/u/s!AuTKPznBac46gph_50chTGj1dKS1Nw?e=DCnptR
-* trainMlCloudDetect.1.0.0.exe    https://1drv.ms/u/s!AuTKPznBac46gpkA_zD36PS0xB8OpQ?e=pzdUrZ
-
-## Release Log
-1.0.0   Milestone release
-* Object oriented code
-* training of new models to remove version dependency in Tensorflow/Keras using TeachingMachine to generate model
-* Labels file not required
-* Parameters now stored in INI file
-* mlCloudDetect.log includes detailed logging
-* Simplified output:
-    * Cloud History removed
-    * Cloud.txt file removed
-    * Allskycam.txt file removed
-    * End user configurable output formerly roofStatus.txt
-* Windows requirements harmonized with Python
-
-0.9.0   Initial release 
-* Parameters to enable use in Windows
-* Creates files with roofStatus.txt for whether the roof should be open or not
-* allskycam.txt for text to include in allskycam displays
-* cloudHistory.txt for cloud history
-
+- Add documentation for training
+- Add more classes

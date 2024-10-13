@@ -16,13 +16,6 @@ fhandler.setFormatter(formatter)
 logger.addHandler(fhandler)
 logger.setLevel(logging.INFO)
 
-if os.name == 'nt':
-    _ = os.system('cls')
-else:
-    _ = os.system('clear')
-print("trainMlCloudDetect by Gord Tulloch gord.tulloch@gmail.com V1.0 2024/09/04")
-print("Usage: trainMlCloudDetect with no parameters. See mlCloudDetect.ini for input parameters")
-
 VERSION = '1.0'
 
 logger.info("Program Start - trainMlCloudDetect" + VERSION)
@@ -87,7 +80,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
         logger.info(f"Finished batch {batch + 1}, loss: {logs['loss']}, accuracy: {logs['accuracy']}")
 
 # Train the model
-model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=10, callbacks=[LoggingCallback()])
+model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=50, callbacks=[LoggingCallback()])
 
 # Evaluate the model
 loss, accuracy = model.evaluate(normalized_val_ds)
