@@ -58,10 +58,10 @@ class McpClouds(object):
         detect_start = time.time()
 
         # Predicts the model
-        prediction = self.model.predict(image_array,verbose=0)
+        prediction = self.model.predict(image_array, verbose=0)
         idx = np.argmax(prediction)
         class_name = self.CLASS_NAMES[idx]
-        confidence_score = (prediction[0][idx]).astype(np.float32)
+        confidence_score = float(prediction[0][idx])  # Convert to native Python float
 
         detect_elapsed_s = time.time() - detect_start
         logger.info('Cloud detection in %0.4f s', detect_elapsed_s)
