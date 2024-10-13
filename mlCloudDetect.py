@@ -19,6 +19,16 @@ from mcpClouds import McpClouds
 clouds=McpClouds()
 from mcpConfig import McpConfig
 config=McpConfig()
+
+# MQTT configuration
+mqtt_broker = "192.168.1.250"
+mqtt_port = 1883
+mqtt_topic = "Astro/CloudStatus"
+
+# Initialize MQTT client
+client = mqtt.Client()
+client.connect(mqtt_broker, mqtt_port, 60)
+
 #latestFile=config.get("ALLSKYFILE")
 
 # # URL to fetch the latest file
