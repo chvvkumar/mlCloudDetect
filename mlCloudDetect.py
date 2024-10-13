@@ -20,9 +20,9 @@ from mcpConfig import McpConfig
 config=McpConfig()
 
 # MQTT configuration
-mqtt_broker = "192.168.1.250"
-mqtt_port = 1883
-mqtt_topic = "Astro/CloudStatus"
+mqtt_broker = config.get("MQTT_BROKER")
+mqtt_port = config.get("MQTT_PORT")
+mqtt_topic = config.get("MQTT_TOPIC")
 
 # Initialize MQTT client
 client = mqtt.Client()
