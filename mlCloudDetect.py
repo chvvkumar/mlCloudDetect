@@ -28,8 +28,8 @@ print("MQTT Port: "+str(mqtt_port))
 print("MQTT Topic: "+mqtt_topic)
 
 # Initialize MQTT client
-client = mqtt.Client()
-client.connect(mqtt_broker, mqtt_port, 60)
+# client = mqtt.Client()
+# client.connect(mqtt_broker, mqtt_port, 60)
 
 while True:
 	date = datetime.datetime.now(datetime.timezone.utc)
