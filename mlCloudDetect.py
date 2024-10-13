@@ -7,6 +7,8 @@ from pysolar.solar import *
 import datetime
 import os
 import requests
+import paho.mqtt.client as mqtt
+import json
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -14,7 +16,7 @@ warnings.filterwarnings("ignore")
 VERSION="1.0.0"
 
 from mcpClouds import McpClouds
-detection=McpClouds()
+clouds=McpClouds()
 from mcpConfig import McpConfig
 config=McpConfig()
 #latestFile=config.get("ALLSKYFILE")
