@@ -50,9 +50,8 @@ class McpClouds(object):
         result = self.detect(image)
         return result
 
-    def detect(self, imagePath):
+    def detect(self, image):
         # Load and preprocess the image
-        image = Image.open(imagePath)
         image = image.resize((256, 256))
         image_array = np.array(image) / 255.0
         image_array = np.expand_dims(image_array, axis=0)
