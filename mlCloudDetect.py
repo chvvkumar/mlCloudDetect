@@ -13,81 +13,30 @@ warnings.filterwarnings("ignore")
 VERSION="1.0.0"
 
 from mcpClouds import McpClouds
-clouds=McpClouds()
+detection=McpClouds()
 from mcpConfig import McpConfig
 config=McpConfig()
+#latestFile=config.get("ALLSKYFILE")
 
-# Set up logging
-import logging
-logFilename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'mlCloudDetect.log')
-logger = logging.getLogger()
-fhandler = logging.FileHandler(filename=logFilename, mode='a')
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fhandler.setFormatter(formatter)
-logger.addHandler(fhandler)
-logger.info("Program Start - mlCloudDetect"+VERSION)
-logger.setLevel(logging.INFO)
+# URL to fetch the latest file
+latest_file_url = config.get("LATEST_FILE_URL")
 
-# Where are the files? 
-roofStatusFile=config.get("STATUSFILE")
-
-# Provide usage if no parameters provided
-if os.name == 'nt':
-	_ = os.system('cls')
+# Fetch the latest file from the URL
+response = requests.get(latest_file_url)
+if response.status_code == 200:
+    latestFile = response.text.strip()
 else:
-	_ = os.system('clear')
-print ("mlCloudDetect by Gord Tulloch gord.tulloch@gmail.com "+VERSION)
-print ("Usage: mlCloudDetect with no parameters. See mlCloudDetect.ini for input parameters")
+    raise Exception(f"Failed to fetch latest file from URL: {latest_file_url}")
 
-latestFile=config.get("ALLSKYFILE")
-
-# Set up lat and long so sun altitude can be calc'd
-latitude=float(config.get("LATITUDE"))
-longitude=float(config.get("LONGITUDE"))
-
-# Set timeframe to set roof operations pending
-pendingCount=int(config.get("PENDING"))
-
-#######################################################################################
-## DO NOT EDIT FROM HERE ON
-#######################################################################################
-cloudCount = clearCount = 0
-roofStatus="UNKNOWN"
 
 while True:
 	# If the sun is up don't bother
 	date = datetime.datetime.now(datetime.timezone.utc)
-	if (get_altitude(latitude, longitude, date) > int(config.get("DAYTIME"))):
-		print(date," Daytime skipping")
-		f = open(roofStatusFile,"w")	
-		f.write("Daytime")
-		f.close()
-		time.sleep(60)
-		continue
-	
+
 	# Call the clouds object to determine if it's cloudy
-	result,text=clouds.isCloudy()
+	result=clouds.isCloudy()
+	client.publish(mqtt_topic, result)
+	print(result)
 
-	if (result):
-		cloudCount +=1
-		if (cloudCount >= int(config.get("PENDING"))):
-			roofStatus=config.get("CLOUDMSG")
-			clearCount=0
-		elif not(roofStatus==config.get("CLOUDMSG")):
-			roofStatus=config.get("CLOUDPENDINGMSG")
-			clearCount=0
-	else:
-		clearCount+=1
-		if (clearCount >= int(config.get("PENDING"))):
-			roofStatus=config.get("CLEARMSG")
-			cloudCount=0
-		elif not(roofStatus==config.get("CLEARMSG")):
-			cloudCount=0
-			roofStatus=config.get("CLEARPENDINGMSG")
+	time.sleep(30)
 
-	f1=open(roofStatusFile,"w")
-	f1.write(roofStatus+"\r\n"+text)
-	f1.close
-	print(roofStatus," -- ",date,text)
-
-	time.sleep(60)
