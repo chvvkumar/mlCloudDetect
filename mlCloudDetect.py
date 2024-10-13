@@ -21,15 +21,15 @@ from mcpConfig import McpConfig
 config=McpConfig()
 #latestFile=config.get("ALLSKYFILE")
 
-# URL to fetch the latest file
-latest_file_url = config.get("LATEST_FILE_URL")
+# # URL to fetch the latest file
+# latest_file_url = config.get("LATEST_FILE_URL")
 
-# Fetch the latest file from the URL
-response = requests.get(latest_file_url)
-if response.status_code == 200:
-    latestFile = response.text.strip()
-else:
-    raise Exception(f"Failed to fetch latest file from URL: {latest_file_url}")
+# # Fetch the latest file from the URL
+# response = requests.get(latest_file_url)
+# if response.status_code == 200:
+#     latestFile = response.text.strip()
+# else:
+#     raise Exception(f"Failed to fetch latest file from URL: {latest_file_url}")
 
 
 while True:

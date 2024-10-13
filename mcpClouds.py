@@ -12,6 +12,8 @@ import logging
 import sqlite3
 import os
 import json
+import requests
+from io import BytesIO
 
 from mcpConfig import McpConfig
 config=McpConfig()
@@ -42,9 +44,11 @@ class McpClouds(object):
         self.model = keras.models.load_model(config.get("KERASMODEL"), compile=False)
 
     def classify(self):
-        image_file = config.get("ALLSKYFILE")
-        result=self.detect(image_file)
-        return (result)
+        image_url = config.get("LATEST_FILE_URL")
+        response = requests.get(image_url)
+        image = Image.open(BytesIO(response.content))
+        result = self.detect(image)
+        return result
 
     def detect(self, imagePath):
         # Load and preprocess the image
