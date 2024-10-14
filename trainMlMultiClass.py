@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Conv2D, Flatten, Dense, Dropout, MaxPooling2D
+from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Dropout, MaxPooling2D
 import os
 import cv2
 from PIL import Image
@@ -53,7 +53,7 @@ normalized_val_ds = validation_dataset.map(lambda x, y: (normalization_layer(x),
 
 # Define the model
 model = Sequential([
-    input(shape=(256, 256, 3)),
+    Input(shape=(256, 256, 3)),
     Conv2D(32, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
     Conv2D(64, (3, 3), activation='relu'),
