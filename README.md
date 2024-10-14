@@ -2,6 +2,8 @@
 
 ## Overview
 
+![alt text](image.png)
+
 This project is designed to use to determine sky conditions from TJ's AllSky application and publish it to Home Assistant via MQTT. 
 
 This code is heavily inspired by @gordtulloch's work here:
@@ -18,6 +20,7 @@ I have changed it to suit my own use case.
 - Changed requirements and imports to add and remove packages as needed
 - Added the ability to obtain the image from a URL instead of from a file as I intend to run this on a different machine to the AllSky Pi
 - Added the output to MQTT to include some detection parameters like confidence level, duration etc. This can be furthur used in Home Assistant to create entity colors based on confidence level of the identification
+- Added progress to be shown during training on a per epoch cycle to help keep track of  training progress
 - Changed `loss` to 'sparse_categorical_crossentropy'from `binary_crossentropy`
 - Results are published to MQTT as a JSON object that can easily be parsed in HA using template sensors
 
