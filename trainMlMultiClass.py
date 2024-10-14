@@ -5,6 +5,7 @@ import os
 import cv2
 from PIL import Image
 import numpy
+import time
 
 # Set up logging
 import logging
