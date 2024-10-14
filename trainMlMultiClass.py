@@ -84,7 +84,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
         logger.info(f"Finished batch {batch + 1}, loss: {logs['loss']}, accuracy: {logs['accuracy']}")
 
 # Compile the model
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
 model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=20, callbacks=[LoggingCallback()])
