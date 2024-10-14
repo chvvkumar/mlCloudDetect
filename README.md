@@ -2,7 +2,7 @@
 
 ## Overview
 
-![alt text](image.png)
+![alt text](/images/image.png)
 
 This project is designed to use to determine sky conditions from TJ's AllSky application and publish it to Home Assistant via MQTT. 
 
@@ -49,19 +49,19 @@ I have changed it to suit my own use case.
 
 Training:
 
-![alt text](image-1.png)
+![alt text](/images/image-1.png)
 
 Recognition:
 
-![alt text](image-2.png)
+![alt text](/images/image-2.png)
 
 MQTT Messages:
 
-![alt text](image-3.png)
+![alt text](/images/image-3.png)
 
 Home Assistant Display:
 
-![alt text](image-4.png)
+![alt text](/images/image-4.png)
 
 
 ## Install
