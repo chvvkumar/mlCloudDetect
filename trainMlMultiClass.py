@@ -51,6 +51,9 @@ normalization_layer = tf.keras.layers.Rescaling(1./255)
 normalized_train_ds = train_dataset.map(lambda x, y: (normalization_layer(x), y))
 normalized_val_ds = validation_dataset.map(lambda x, y: (normalization_layer(x), y))
 
+# Define the number of classes
+NUM_CLASSES = 6
+
 # Define the model
 model = Sequential([
 #    Input(shape=(256, 256, 3)),
@@ -63,7 +66,7 @@ model = Sequential([
     MaxPooling2D((2, 2)),
     Flatten(),
     Dense(128, activation='relu'),
-    Dense(10, activation='softmax')  # 10 classes
+    Dense(NUM_CLASSES, activation='softmax')  # 10 classes
 ])
 
 # Custom callback to log progress
