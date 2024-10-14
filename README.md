@@ -85,15 +85,27 @@ Home Assistant Display:
 
 ## Usage
 
-- To run the main script:
+- To train the machine learning model:
+
+    Place your training data in this folder structure:
+    ```
+    .
+    └── train
+        ├── ClearDay
+        ├── ClearNight
+        ├── CloudyandRainy
+        ├── CloudyDay
+        ├── CloudyNight
+        └── Rainy
+    ```
+    and run
+    ```sh
+    python3 trainMlMultiClass.py
+    ```
+- To run the detection script:
     ```sh
     python3 mlCloudDetect.py
     ```
-- To train the machine learning model:
-    ```sh
-    python trainMlMultiClass.py
-    ```
-
 ## Configuration
 
 - Modify the `mlCloudDetect.ini` file to configure the cloud detection settings. Add your MQTT broker details, your training folders etc.
