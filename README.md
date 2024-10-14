@@ -48,15 +48,19 @@ I have changed it to suit my own use case.
 ## Screenshots
 
 Training:
+
 ![alt text](image-1.png)
 
 Recognition:
+
 ![alt text](image-2.png)
 
 MQTT Messages:
+
 ![alt text](image-3.png)
 
 Home Assistant Display:
+
 ![alt text](image-4.png)
 
 
