@@ -85,11 +85,17 @@ class LoggingCallback(tf.keras.callbacks.Callback):
     def on_batch_end(self, batch, logs=None):
         logger.info(f"Finished batch {batch + 1}, loss: {logs['loss']}, accuracy: {logs['accuracy']}")
 
+# Early stopping callback
+EarlyStopCallback = tf.keras.callbacks.EarlyStopping(monitor='loss',patience=5)
+
 # Compile the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
-model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=20, callbacks=[LoggingCallback()])
+history = model.fit(normalized_train_ds, 
+                    validation_data=normalized_val_ds, 
+                    epochs=20, 
+                    callbacks=[EarlyStopCallback,LoggingCallback()])
 
 # Evaluate the model
 loss, accuracy = model.evaluate(normalized_val_ds)
