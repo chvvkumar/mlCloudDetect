@@ -2,7 +2,7 @@
 
 ## Overview
 
-![alt text](/images/image.png)
+![alt text](/images/banner.png)
 
 This project is designed to use to determine sky conditions from TJ's AllSky application and publish it to Home Assistant via MQTT. 
 
