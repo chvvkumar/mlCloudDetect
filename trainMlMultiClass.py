@@ -92,7 +92,7 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 EPOCHS = 10
 
 # Model checkpoint callback
-checkpoint_filepath = "weights-improvement-{epoch:02d}-{val_accuracy:.2f}.weights.h5"
+checkpoint_filepath = "best.weights.h5"
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
                         filepath=checkpoint_filepath,
                         save_weights_only=True,
