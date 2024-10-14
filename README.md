@@ -9,7 +9,7 @@ https://github.com/gordtulloch/mlCloudDetect
 
 I have changed it to suit my own use case.
 
-## Changes from hte original code
+## Changes from original code
 - Remove functionality to save the results to a file as results will be published to MQTT instead
 - Removed detection based on sun as this is intended to run all the time, regardless of whether it is day or night
 - Removed OS checks and messages as I intend this to only run on Debian/Raspberry PI OS
@@ -18,6 +18,7 @@ I have changed it to suit my own use case.
 - Changed requirements and imports to add and remove packages as needed
 - Added the ability to obtain the image from a URL instead of from a file as I intend to run this on a different machine to the AllSky Pi
 - Added the output to MQTT to include some detection parameters like confidence level, duration etc. This can be furthur used in Home Assistant to create entity colors based on confidence level of the identification
+- Changed `loss` to 'sparse_categorical_crossentropy'from `binary_crossentropy`
 - Results are published to MQTT as a JSON object that can easily be parsed in HA using template sensors
 
 ## Overview of operations
