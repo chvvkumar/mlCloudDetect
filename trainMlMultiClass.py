@@ -89,7 +89,8 @@ class LoggingCallback(tf.keras.callbacks.Callback):
 # Compile the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-EPOCHS = 50
+# Train the model for however many epochs
+EPOCHS = 20
 
 # Model checkpoint callback
 checkpoint_filepath = "best.weights.h5"
