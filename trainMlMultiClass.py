@@ -86,3 +86,6 @@ model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=50, cal
 loss, accuracy = model.evaluate(normalized_val_ds)
 logger.info(f"Validation Loss: {loss}")
 logger.info(f"Validation Accuracy: {accuracy}")
+
+# Save the model
+model.save('mlCloudDetect.keras')
