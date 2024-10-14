@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras import Sequential
+from tensorflow.keras import Sequential, models    
 from tensorflow.keras.layers import Input, Conv2D, Flatten, Dense, Dropout, MaxPooling2D
 import os
 import cv2
@@ -85,6 +85,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
     def on_batch_end(self, batch, logs=None):
         logger.info(f"Finished batch {batch + 1}, loss: {logs['loss']}, accuracy: {logs['accuracy']}")
 
+
 # Compile the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
@@ -106,8 +107,11 @@ EarlyStopCallback = tf.keras.callbacks.EarlyStopping(
                         verbose=1
                         )
 
-# The model (that are considered the best) can be loaded as -
-tf.keras.models.load_model(checkpoint_filepath)
+# Load the model if it exists
+if os.path.exists(checkpoint_filepath):
+    model = tf.keras.models.load_model(checkpoint_filepath)
+else:
+    logger.warning(f"Checkpoint file {checkpoint_filepath} not found. Skipping model loading.")
 
 # Callbacks
 callbacks_list = [EarlyStopCallback, 
