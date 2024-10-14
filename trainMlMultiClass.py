@@ -94,8 +94,9 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 # Train the model
 history = model.fit(normalized_train_ds, 
                     validation_data=normalized_val_ds, 
-                    epochs=20, 
-                    callbacks=[EarlyStopCallback,LoggingCallback()])
+                    epochs=50, 
+                    callbacks=[EarlyStopCallback,
+                               LoggingCallback()])
 
 # Evaluate the model
 loss, accuracy = model.evaluate(normalized_val_ds)
