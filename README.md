@@ -61,9 +61,12 @@ MQTT Messages:
 
 Home Assistant Display:
 
-![alt text](/images/image-4.png)
+![alt text](/images/image01.png)
 
-![alt text](/images/image-5.png)
+![alt text](/images/image02.png)
+
+![alt text](/images/dashboard.png)
+
 
 ## Install
 
