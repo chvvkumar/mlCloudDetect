@@ -49,21 +49,21 @@ I have changed it to suit my own use case.
 
 Training:
 
-![alt text](/images/image-1.png)
+![alt text](/images/training.png)
 
 Recognition:
 
-![alt text](/images/image-2.png)
+![alt text](/images/recognition.png)
 
 MQTT Messages:
 
-![alt text](/images/image-3.png)
+![alt text](/images/mqtt.png)
 
 Home Assistant Display:
 
-![alt text](/images/image01.png)
+![alt text](/images/dash1.png)
 
-![alt text](/images/image02.png)
+![alt text](/images/dash2.png)
 
 ![alt text](/images/dashboard.png)
 
