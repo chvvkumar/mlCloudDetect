@@ -45,6 +45,18 @@ I have changed it to suit my own use case.
 - `requirements.txt`: List of dependencies required for the project.
 - `trainMlMultiClass.py`: Script for training a multi-class machine learning model.
 
+## Screenshots
+
+Training:
+![alt text](image-1.png)
+
+Recognition:
+
+MQTT Messages:
+
+Home Assistant Display:
+
+
 ## Installation
 
 1. Clone the repository:
