@@ -80,7 +80,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
         logger.info(f"Finished batch {batch + 1}, loss: {logs['loss']}, accuracy: {logs['accuracy']}")
 
 # Train the model
-model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=50, callbacks=[LoggingCallback()])
+model.fit(normalized_train_ds, validation_data=normalized_val_ds, epochs=20, callbacks=[LoggingCallback()])
 
 # Evaluate the model
 loss, accuracy = model.evaluate(normalized_val_ds)
