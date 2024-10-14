@@ -89,7 +89,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
 # Compile the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-EPOCHS = 10
+EPOCHS = 50
 
 # Model checkpoint callback
 checkpoint_filepath = "best.weights.h5"
@@ -104,7 +104,8 @@ model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
 EarlyStopCallback = tf.keras.callbacks.EarlyStopping(
                         monitor='loss',
                         patience=5,
-                        verbose=1
+                        verbose=1,
+                        restore_best_weights=True
                         )
 
 # Load the model if it exists
