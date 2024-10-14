@@ -53,7 +53,7 @@ normalized_val_ds = validation_dataset.map(lambda x, y: (normalization_layer(x),
 
 # Define the model
 model = Sequential([
-    Input(shape=(256, 256, 3)),
+    input(shape=(256, 256, 3)),
     Conv2D(32, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
     Conv2D(64, (3, 3), activation='relu'),
