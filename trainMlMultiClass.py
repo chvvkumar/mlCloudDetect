@@ -85,26 +85,26 @@ class LoggingCallback(tf.keras.callbacks.Callback):
     def on_batch_end(self, batch, logs=None):
         logger.info(f"Finished batch {batch + 1}, loss: {logs['loss']}, accuracy: {logs['accuracy']}")
 
-# Early stopping callback
-EarlyStopCallback = tf.keras.callbacks.EarlyStopping(
-                        monitor='loss',
-                        patience=5,
-                        verbose=1
-                        )
-
 # Compile the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 EPOCHS = 10
 
 # Model checkpoint callback
-checkpoint_filepath = '/tmp/ckpt/weights-improvement-{epoch:02d}-{val_accuracy:.2f}.weights.h5'
+checkpoint_filepath = 'weights-improvement-{epoch:02d}-{val_accuracy:.2f}.weights.h5'
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-    filepath=checkpoint_filepath,
-    save_weights_only=True,
-    monitor='val_accuracy',
-    mode='max',
-    save_best_only=True)
+                        filepath=checkpoint_filepath,
+                        save_weights_only=True,
+                        monitor='val_accuracy',
+                        mode='max',
+                        save_best_only=True)
+
+# Early stopping callback
+EarlyStopCallback = tf.keras.callbacks.EarlyStopping(
+                        monitor='loss',
+                        patience=5,
+                        verbose=1
+                        )
 
 # The model (that are considered the best) can be loaded as -
 tf.keras.models.load_model(checkpoint_filepath)
