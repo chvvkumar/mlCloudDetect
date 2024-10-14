@@ -63,13 +63,16 @@ model = Sequential([
     Dense(10, activation='softmax')  # 10 classes
 ])
 
-# Compile the model
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
-
 # Custom callback to log progress
 class LoggingCallback(tf.keras.callbacks.Callback):
+    def on_train_begin(self, logs=None):
+        self.train_start_time = time.time()
+        logger.info("Training started")
+
+    def on_train_end(self, logs=None):
+        train_duration = time.time() - self.train_start_time
+        logger.info(f"Training finished in {train_duration:.2f} seconds")
+
     def on_epoch_begin(self, epoch, logs=None):
         logger.info(f"Starting epoch {epoch + 1}")
 
