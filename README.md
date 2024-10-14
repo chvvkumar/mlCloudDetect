@@ -44,7 +44,6 @@ I have changed it to suit my own use case.
 - `mlCloudDetect.py`: Main script to handle cloud detection.
 - `requirements.txt`: List of dependencies required for the project.
 - `trainMlMultiClass.py`: Script for training a multi-class machine learning model.
-- `TODO`: List of tasks and features to be implemented.
 
 ## Installation
 
