@@ -60,7 +60,7 @@ Home Assistant Display:
 ![alt text](image-4.png)
 
 
-## Installation
+## Install
 
 1. Clone the repository:
     ```sh
