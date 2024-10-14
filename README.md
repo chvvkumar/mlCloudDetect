@@ -124,11 +124,25 @@ Home Assistant Display:
     python3 -m venv . && source bin/activate && python3 mlCloudDetect.py
     ```
 - `chmod +x` to make it executable
-- Add this to your user's `crontab -e`
+- Add to your user's `crontab -e`
     ```sh
     @reboot /home/pi/initMLCloudDetect.sh
     ```
+- Add sensors to Home Assistant
+    ```yaml
+    - name: "Cloud Status"
+        unique_id: DXWiwkjvhjhzf7KGwAFDAo7K
+        icon: mdi:clouds
+        state_topic: "Astro/Skytatus"
+        value_template: "{{ value_json.class_name }}"
 
+    - name: "Cloud Status Confidence"
+        unique_id: tdrgfwkjvhjhzf7KGwAFDAo7K
+        icon: mdi:exclamation
+        state_topic: "Astro/Skytatus"
+        value_template: "{{ value_json.confidence_score | float * 100 }}"
+        unit_of_measurement: "%"
+    ```
 ## To-Do
 
 - Add documentation for training
