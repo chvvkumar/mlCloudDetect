@@ -10,6 +10,7 @@ import os
 import json
 import requests
 from io import BytesIO
+import configparser
 
 # import sqlite3
 # import argparse
@@ -30,22 +31,28 @@ logger.setLevel(logging.INFO)
 # Add the parent directory to the path so we can import the config
 sys.path.append(str(Path(__file__).parent.absolute().parent))
 
-# Define the McpClouds class
-class McpClouds(object):
-    CLASS_NAMES = (
-        'ClearDay',
-        'ClearNight',
-        'CloudyandRainy',
-        'CloudyDay',
-        'CloudyNight',
-        'Rainy'
-    )
-
+class McpClouds:
     # Initialize the object
     def __init__(self):
         self.config = config
         logger.info('Using keras model: %s', config.get("KERASMODEL"))
         self.model = keras.models.load_model(config.get("KERASMODEL"), compile=False)
+        # Read trainfolder from config and list directories
+        trainfolder = config.get("TRAINFOLDER")
+        self.CLASS_NAMES = self._get_class_names(trainfolder)
+        logger.info('Class names: %s', self.CLASS_NAMES)
+
+    # Get the class names from the training folder
+    def _get_class_names(self, trainfolder):
+        try:
+            class_names = [d.name for d in Path(trainfolder).iterdir() if d.is_dir()]
+            print(f"Class names: {class_names}")
+            return class_names
+        except Exception as e:
+            logger.error('Error reading class names from trainfolder: %s', e)
+            class_names = self.config.get("CLASS_NAMES").split(",")
+            logger.info('Loaded class names from config file: %s', class_names)
+            return class_names
 
     # Classify the image
     def classify(self):

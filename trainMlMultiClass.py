@@ -6,6 +6,7 @@ import cv2
 from PIL import Image
 import numpy
 import time
+import configparser
 
 # Set up logging
 import logging
@@ -19,12 +20,26 @@ logger.setLevel(logging.INFO)
 
 VERSION = '1.0'
 
+# Train the model for however many epochs
+EPOCHS = 50
+
 logger.info("Program Start - trainMlCloudDetect" + VERSION)
 
 from mcpConfig import McpConfig
 config = McpConfig()
 
+# Load the data directory from the config file
 dataDir = config.get('TRAINFOLDER')
+print(f"Data directory: {dataDir}")
+
+# List all directories (classes) under the training folder
+dir_count = [d for d in os.listdir(dataDir) if os.path.isdir(os.path.join(dataDir, d))]
+
+# Count the number of directories
+NUM_CLASSES = len(dir_count)
+
+print(f"Number of classes found under {dataDir}: {NUM_CLASSES}")
+logger.info(f"Number of classes: {NUM_CLASSES}")
 
 # Load the data
 train_dataset = tf.keras.preprocessing.image_dataset_from_directory(
@@ -50,9 +65,6 @@ validation_dataset = tf.keras.preprocessing.image_dataset_from_directory(
 normalization_layer = tf.keras.layers.Rescaling(1./255)
 normalized_train_ds = train_dataset.map(lambda x, y: (normalization_layer(x), y))
 normalized_val_ds = validation_dataset.map(lambda x, y: (normalization_layer(x), y))
-
-# Define the number of classes
-NUM_CLASSES = 6
 
 # Define the model
 model = Sequential([
@@ -92,21 +104,20 @@ class LoggingCallback(tf.keras.callbacks.Callback):
 # Compile the model
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-# Train the model for however many epochs
-EPOCHS = 20
 
 # Model checkpoint callback
-checkpoint_filepath = "best.weights.h5"
+checkpoint_filepath = "best.weights.keras"
 model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
                         filepath=checkpoint_filepath,
-                        save_weights_only=True,
+                        save_weights_only=False,
                         monitor='val_accuracy',
                         mode='max',
                         save_best_only=True)
 
 # Early stopping callback
 EarlyStopCallback = tf.keras.callbacks.EarlyStopping(
-                        monitor='loss',
+                        monitor='accuracy',
+                        min_delta=0,
                         patience=5,
                         verbose=1,
                         restore_best_weights=True
@@ -136,3 +147,4 @@ logger.info(f"Validation Accuracy: {accuracy}")
 
 # Save the model
 model.save('mlCloudDetect.keras')
+model.summary()

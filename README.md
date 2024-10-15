@@ -2,7 +2,7 @@
 
 ## Overview
 
-![alt text](/images/banner.png)
+![alt text](/images/image.png)
 
 This project is designed to use to determine sky conditions from TJ's AllSky application and publish it to Home Assistant via MQTT. 
 
@@ -21,7 +21,9 @@ I have changed it to suit my own use case.
 - Added the ability to obtain the image from a URL instead of from a file as I intend to run this on a different machine to the AllSky Pi
 - Added the output to MQTT to include some detection parameters like confidence level, duration etc. This can be furthur used in Home Assistant to create entity colors based on confidence level of the identification
 - Added progress to be shown during training on a per epoch cycle to help keep track of  training progress
-- Changed `loss` to 'sparse_categorical_crossentropy'from `binary_crossentropy`
+- Added the ability to configure detection classes from the config INI file
+- Added EarlyStop and CheckPoint features to stop training if Accuracy does not increase over given epochs. Checkpoints will automatically save the best weights out of all the epochs
+- Changed `loss` to `sparse_categorical_crossentropy`from `binary_crossentropy`
 - Results are published to MQTT as a JSON object that can easily be parsed in HA using template sensors
 
 ## Overview of operations
@@ -89,6 +91,12 @@ Home Assistant Display:
 5. In some cases, you may also need to install the following 
     ```sh
     sudo apt-get update && sudo apt-get install ffmpeg libsm6 libxext6
+    ```
+6. Install GPU tools for CUDA if you have a supported GPU to speed up training
+    ```sh
+    python3 -m pip install tensorflow[and-cuda]
+    # Verify the installation:
+    python3 -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
     ```
 
 ## Usage
