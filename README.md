@@ -23,6 +23,7 @@ I have changed it to suit my own use case.
 - Added progress to be shown during training on a per epoch cycle to help keep track of  training progress
 - Added the ability to configure detection classes from the config INI file
 - Added EarlyStop and CheckPoint features to stop training if Accuracy does not increase over given epochs. Checkpoints will automatically save the best weights out of all the epochs
+- Training script will automatically load each folder under the 'trainfolder' variable into detection classes. These classes still will have to be specified under `class_names`in the INI file.
 - Changed `loss` to `sparse_categorical_crossentropy`from `binary_crossentropy`
 - Results are published to MQTT as a JSON object that can easily be parsed in HA using template sensors
 
